@@ -19,22 +19,22 @@ class Agent:
         child_list = []
 
         if row_0 > 0:
-            node1 = next_node(node, row_0, col_0, row_0 - 1, col_0, "up")
+            node1 = next_node(node, row_0, col_0, row_0 - 1, col_0, "down")
             found = search_equal_state(node1.state, list)
             if not found:
                 child_list.append(node1)
         if row_0 < dimension:
-            node2 = next_node(node, row_0, col_0, row_0 + 1, col_0, "down")
+            node2 = next_node(node, row_0, col_0, row_0 + 1, col_0, "up")
             found = search_equal_state(node2.state, list)
             if not found:
                 child_list.append(node2)
         if col_0 > 0:
-            node3 = next_node(node, row_0, col_0, row_0, col_0 - 1, "left")
+            node3 = next_node(node, row_0, col_0, row_0, col_0 - 1, "right")
             found = search_equal_state(node3.state, list)
             if not found:
                 child_list.append(node3)
         if col_0 < dimension:
-            node4 = next_node(node, row_0, col_0, row_0, col_0 + 1, "right")
+            node4 = next_node(node, row_0, col_0, row_0, col_0 + 1, "left")
             found = search_equal_state(node4.state, list)
             if not found:
                 child_list.append(node4)

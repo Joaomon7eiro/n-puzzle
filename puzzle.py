@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     agent = Agent()
 
-    dimension = 3#int(input("digite a dimensao da matrix:"))
+    dimension = int(input("digite a dimensao da matrix:"))
 
     list = create_n_n_matrix(dimension)
     #
