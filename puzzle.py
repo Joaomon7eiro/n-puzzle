@@ -3,6 +3,43 @@ from random import randint
 #from numpy import *
 
 
+def ranking(node_list, goal):
+
+    ranking_nodes = []
+    best_ranking = 100
+
+    for node in node_list:
+        ranking = 0
+        for row_values in node.state:
+            for value in row_values:
+                value_row, value_col = find_number_row_and_col(node.state, value)
+                goal_row, goal_col = find_number_row_and_col(goal, value)
+
+                if goal_row >= value_row:
+                    ranking += goal_row - value_row
+                else:
+                    ranking += goal_row + value_row
+
+                if goal_col >= value_col:
+                    ranking += goal_col - value_col
+                else:
+                    ranking += goal_col + value_col
+
+                if ranking < best_ranking:
+                    best_ranking = ranking
+        print(ranking)
+        node.ranking = ranking
+        print('node ',node.state)
+        print('goal ', goal)
+        print('rank ', node.ranking)
+    for node in node_list:
+
+        if node.ranking == best_ranking:
+            ranking_nodes.append(node)
+
+    return ranking_nodes
+
+
 def search_equal_state(state, list):
     for node in list:
         if node.state == state:
@@ -10,24 +47,25 @@ def search_equal_state(state, list):
 
     return False
 
-def find_row0_col0(list):
-    row_0, col_0 = 0, 0
+
+def find_number_row_and_col(list, number):
+    number_row, number_col = 0, 0
     for index_row, row in enumerate(list):
         for index_col, value in enumerate(row):
-            if value == 0:
-                row_0, col_0 = index_row, index_col
+            if value == number:
+                number_row, number_col = index_row, index_col
                 break
 
-    return row_0, col_0
+    return number_row, number_col
 
-def create_n_n_matrix(dimension):
-
-    x = range(1, dimension*dimension + 1)
-
-    x = reshape(x, (dimension, dimension))
-    x[-1][-1] = 0
-
-    return x
+# def create_n_n_matrix(dimension):
+#
+#     x = range(1, dimension*dimension + 1)
+#
+#     x = reshape(x, (dimension, dimension))
+#     x[-1][-1] = 0
+#
+#     return x
 
 
 def format_matrix(matrix):
@@ -46,47 +84,47 @@ class Agent:
         node = Node(new_list, node, node.depth + 1, action)
         return node
 
-    def goal(self, node, dimension):
-        dimension *= dimension
-        count = 1
-        for index_row in node.state:
-            for index_col in index_row:
-                if index_col != count:
-                    if count == dimension:
-                        return True
-                    else:
-                        return False
-                else:
-                    count += 1
+    def goal(self, list, goal_list):
 
-    def next(self, node, list, dimension):
+        if list == goal_list:
+            return True
+        else:
+            return False
+
+    def next(self, node, list, dimension, goal_state):
 
         dimension -= 1
 
-        row_0, col_0 = find_row0_col0(node.state)
+        row_0, col_0 = find_number_row_and_col(node.state, 0)
+
+        child_list = []
 
         if row_0 > 0:
             node1 = self.next_node(node, row_0, col_0, row_0 - 1, col_0, "up")
             found = search_equal_state(node1.state, list)
             if not found:
-                list.append(node1)
+                child_list.append(node1)
         if row_0 < dimension:
             node2 = self.next_node(node, row_0, col_0, row_0 + 1, col_0, "down")
             found = search_equal_state(node2.state, list)
             if not found:
-                list.append(node2)
+                child_list.append(node2)
         if col_0 > 0:
             node3 = self.next_node(node, row_0, col_0, row_0, col_0 - 1, "left")
             found = search_equal_state(node3.state, list)
             if not found:
-                list.append(node3)
+                child_list.append(node3)
         if col_0 < dimension:
             node4 = self.next_node(node, row_0, col_0, row_0, col_0 + 1, "right")
             found = search_equal_state(node4.state, list)
             if not found:
-                list.append(node4)
+                child_list.append(node4)
 
-        return list
+        print(child_list)
+        child_list = ranking(child_list, goal_state)
+
+        print(child_list)
+        return list + child_list
 
 
 class Node:
@@ -95,6 +133,7 @@ class Node:
     state = []
     path_cost = 1
     depth = 0
+    ranking = 0 #the less the better
 
     def __init__(self, list, root, deep, action):
         self.root = root
@@ -117,7 +156,9 @@ if __name__ == '__main__':
         [7, 8, 0]
     ]
 
-    move = ["cima", 'esquerda', 'direita', 'baixo']
+    goal_state = list
+
+    move = ["up", 'left', 'right', 'down']
 
     game_node = Node(list, None, 0, "")
 
@@ -126,7 +167,8 @@ if __name__ == '__main__':
     while running_game:
         format_matrix(list)
 
-        row_0, col_0 = find_row0_col0(list)
+        row_0, col_0 = find_number_row_and_col(list, 0)
+
 
         if row_0 != 0:
             print("1 - cima")
@@ -163,13 +205,13 @@ if __name__ == '__main__':
             count = 0
             while count < 5:
 
-                row_0, col_0 = find_row0_col0(game_node.state)
+                row_0, col_0 = find_number_row_and_col(game_node.state, 0)
 
                 move_options = {
-                    'esquerda': [row_0, col_0 - 1],
-                    'direita': [row_0, col_0 + 1],
-                    'cima': [row_0 - 1, col_0],
-                    'baixo': [row_0 + 1, col_0]
+                    'left': [row_0, col_0 - 1],
+                    'right': [row_0, col_0 + 1],
+                    'up': [row_0 - 1, col_0],
+                    'down': [row_0 + 1, col_0]
                 }
 
                 position = randint(0, 3)
@@ -178,16 +220,16 @@ if __name__ == '__main__':
                 row = move_options[option_value][0]
                 col = move_options[option_value][1]
 
-                if row_0 == 0 and option_value == "cima":
+                if row_0 == 0 and option_value == "up":
                     continue
-                if col_0 == 0 and option_value == "esquerda":
+                if col_0 == 0 and option_value == "left":
                     continue
-                if col_0 == dimension - 1 and option_value == "direita":
+                if col_0 == dimension - 1 and option_value == "right":
                     continue
-                if row_0 == dimension - 1 and option_value == "baixo":
+                if row_0 == dimension - 1 and option_value == "down":
                     continue
 
-                game_node = agent.next_node(game_node, row_0, col_0, row, col, "asd")
+                game_node = agent.next_node(game_node, row_0, col_0, row, col, option_value)
                 count += 1
         else:
             running_game = False
@@ -200,7 +242,7 @@ if __name__ == '__main__':
 
     node_list.append(node)
 
-    success = agent.goal(node, dimension)
+    success = agent.goal(node.state, goal_state)
 
     count_process = 0
 
@@ -224,10 +266,10 @@ if __name__ == '__main__':
 
         node_list.pop(search_type)
 
-        node_list = agent.next(node, node_list, dimension)
+        node_list = agent.next(node, node_list, dimension, goal_state)
 
         node = node_list[search_type]
-        success = agent.goal(node, dimension)
+        success = agent.goal(node.state, goal_state)
 
         count_process += 1
 
