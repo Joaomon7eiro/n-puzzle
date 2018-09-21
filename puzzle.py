@@ -9,31 +9,33 @@ def ranking(node_list, goal):
     best_ranking = 100
 
     for node in node_list:
+
         ranking = 0
         for row_values in node.state:
+
             for value in row_values:
+                if value == 0:
+                    continue
                 value_row, value_col = find_number_row_and_col(node.state, value)
                 goal_row, goal_col = find_number_row_and_col(goal, value)
+
 
                 if goal_row >= value_row:
                     ranking += goal_row - value_row
                 else:
-                    ranking += goal_row + value_row
+                    ranking += value_row - goal_row
 
                 if goal_col >= value_col:
                     ranking += goal_col - value_col
                 else:
-                    ranking += goal_col + value_col
+                    ranking += value_col - goal_col
 
-                if ranking < best_ranking:
-                    best_ranking = ranking
-        print(ranking)
+        if ranking < best_ranking:
+            best_ranking = ranking
+
         node.ranking = ranking
-        print('node ',node.state)
-        print('goal ', goal)
-        print('rank ', node.ranking)
-    for node in node_list:
 
+    for node in node_list:
         if node.ranking == best_ranking:
             ranking_nodes.append(node)
 
@@ -120,10 +122,8 @@ class Agent:
             if not found:
                 child_list.append(node4)
 
-        print(child_list)
         child_list = ranking(child_list, goal_state)
 
-        print(child_list)
         return list + child_list
 
 
