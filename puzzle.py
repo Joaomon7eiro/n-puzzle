@@ -3,6 +3,13 @@ from random import randint
 #from numpy import *
 
 
+def search_equal_state(state, list):
+    for node in list:
+        if node.state == state:
+            return True
+
+    return False
+
 def find_row0_col0(list):
     row_0, col_0 = 0, 0
     for index_row, row in enumerate(list):
@@ -30,6 +37,7 @@ def format_matrix(matrix):
     table = [fmt.format(*row) for row in s]
     print('\n'.join(table))
 
+
 class Agent:
     def next_node(self, node, row_0, col_0, new_value_row, new_value_col, action):
         new_list = copy.deepcopy(node.state)
@@ -53,22 +61,30 @@ class Agent:
 
     def next(self, node, list, dimension):
 
-        dimension = dimension - 1
+        dimension -= 1
 
         row_0, col_0 = find_row0_col0(node.state)
 
         if row_0 > 0:
             node1 = self.next_node(node, row_0, col_0, row_0 - 1, col_0, "up")
-            list.append(node1)
+            found = search_equal_state(node1.state, list)
+            if not found:
+                list.append(node1)
         if row_0 < dimension:
             node2 = self.next_node(node, row_0, col_0, row_0 + 1, col_0, "down")
-            list.append(node2)
+            found = search_equal_state(node2.state, list)
+            if not found:
+                list.append(node2)
         if col_0 > 0:
             node3 = self.next_node(node, row_0, col_0, row_0, col_0 - 1, "left")
-            list.append(node3)
+            found = search_equal_state(node3.state, list)
+            if not found:
+                list.append(node3)
         if col_0 < dimension:
             node4 = self.next_node(node, row_0, col_0, row_0, col_0 + 1, "right")
-            list.append(node4)
+            found = search_equal_state(node4.state, list)
+            if not found:
+                list.append(node4)
 
         return list
 
@@ -91,7 +107,7 @@ if __name__ == '__main__':
 
     agent = Agent()
 
-    dimension = int(input("digite a dimensao da matrix:"))
+    dimension = 3#int(input("digite a dimensao da matrix:"))
 
     #list = create_n_n_matrix(dimension)
 
@@ -122,6 +138,7 @@ if __name__ == '__main__':
             print("4 - baixo")
 
         print("5 - embaralhar")
+        print("0 - sair")
 
         op = input("digite a opcao:")
 
@@ -146,7 +163,7 @@ if __name__ == '__main__':
             count = 0
             while count < 5:
 
-                row_0, col_0 = find_row0_col0(list)
+                row_0, col_0 = find_row0_col0(game_node.state)
 
                 move_options = {
                     'esquerda': [row_0, col_0 - 1],
@@ -155,8 +172,8 @@ if __name__ == '__main__':
                     'baixo': [row_0 + 1, col_0]
                 }
 
-                positon = randint(0, 3)
-                option_value = move[positon]
+                position = randint(0, 3)
+                option_value = move[position]
 
                 row = move_options[option_value][0]
                 col = move_options[option_value][1]
@@ -171,10 +188,7 @@ if __name__ == '__main__':
                     continue
 
                 game_node = agent.next_node(game_node, row_0, col_0, row, col, "asd")
-
-                list = game_node.state
                 count += 1
-
         else:
             running_game = False
 
@@ -195,7 +209,6 @@ if __name__ == '__main__':
     print("1 - largura  \n2 - profundidade\n")
     op = input("digite a opcao de busca:")
 
-
     if op == "1":
         search_type = 0
     if op == "2":
@@ -204,7 +217,6 @@ if __name__ == '__main__':
     if op != "2" and op != "1":
         print("erro")
         exit()
-
 
     while not success:
         # for node_i in node_list:
