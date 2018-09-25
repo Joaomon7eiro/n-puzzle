@@ -94,6 +94,8 @@ if __name__ == '__main__':
 
     node_list = []
 
+    all_nodes = []
+
     node_list.append(node)
 
     success = agent.goal(node.state, goal_state)
@@ -115,16 +117,15 @@ if __name__ == '__main__':
         exit()
 
     while not success:
-        for node_i in node_list:
-            print(node_i.action)
-
         node_list.pop(search_type)
 
-        node_list = agent.next(node, node_list, dimension, goal_state)
+        node_list, all_nodes = agent.next(node, node_list, dimension, goal_state, all_nodes)
 
         node = node_list[search_type]
         success = agent.goal(node.state, goal_state)
 
+        print(node.ranking)
+        print(node.action)
         count_process += 1
 
 
