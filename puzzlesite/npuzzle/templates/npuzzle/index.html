@@ -1,0 +1,18 @@
+{% load static %}
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+<link rel="stylesheet" type="text/css" href="{% static 'npuzzle/style.css' %}">
+<script src="{% static 'npuzzle/script.js' %}"></script>
+
+<label>Digite a dimensao da matriz</label>
+<input id="dimension" type="number"  />
+
+<button id="create" onclick="createMatriz();">Gerar Matriz</button>
+
+<div id="divTable"></div>
+
+<button onclick="alerta({{matriz}});">Resolve</button>

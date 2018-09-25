@@ -57,7 +57,7 @@ if __name__ == '__main__':
         elif op == '5':
 
             count = 0
-            while count < 100:
+            while count < 40:
 
                 row_0, col_0 = find_number_row_and_col(game_node.state, 0)
 
@@ -84,6 +84,7 @@ if __name__ == '__main__':
                     continue
 
                 game_node = next_node(game_node, row_0, col_0, row, col, option_value)
+                print(option_value)
                 count += 1
         else:
             running_game = False
@@ -93,6 +94,8 @@ if __name__ == '__main__':
     node = Node(list, None, 0, "")
 
     node_list = []
+
+    all_nodes = []
 
     node_list.append(node)
 
@@ -115,15 +118,20 @@ if __name__ == '__main__':
         exit()
 
     while not success:
-        for node_i in node_list:
-            print(node_i.action)
 
         node_list.pop(search_type)
 
-        node_list = agent.next(node, node_list, dimension, goal_state)
+        for node_list1 in node_list:
+            if node_list1.state == node.state:
+                print("tem igual sim")
+
+        node_list, all_nodes = agent.next(node, node_list, dimension, goal_state, all_nodes)
 
         node = node_list[search_type]
+
+        print(node.ranking)
         success = agent.goal(node.state, goal_state)
+
 
         count_process += 1
 

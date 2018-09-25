@@ -42,9 +42,9 @@ def ranking(node_list, goal):
     return ranking_nodes
 
 
-def search_equal_state(state, list):
-    for node in list:
-        if node.state == state:
+def search_equal_state(new_node, all_nodes):
+    for node in all_nodes:
+        if node.state == new_node.state:
             return True
 
     return False
