@@ -121,17 +121,13 @@ if __name__ == '__main__':
 
         node_list.pop(search_type)
 
-        for node_list1 in node_list:
-            if node_list1.state == node.state:
-                print("tem igual sim")
-
         node_list, all_nodes = agent.next(node, node_list, dimension, goal_state, all_nodes)
 
         node = node_list[search_type]
 
+        print(node.action)
         print(node.ranking)
         success = agent.goal(node.state, goal_state)
-
 
         count_process += 1
 
