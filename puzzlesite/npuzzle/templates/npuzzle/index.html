@@ -1,18 +1,34 @@
 {% load static %}
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous">
+
+
 </script>
 <link rel="stylesheet" type="text/css" href="{% static 'npuzzle/style.css' %}">
 <script src="{% static 'npuzzle/script.js' %}"></script>
 
-<label>Digite a dimensao da matriz</label>
-<input id="dimension" type="number"  />
+<div id="stepOne">
+    <label>Digite a dimensao da matriz</label>
+    <input id="dimension" type="number"  />
+    <button id="create" onclick="createMatriz();">Gerar Matriz</button>
+</div>
 
-<button id="create" onclick="createMatriz();">Gerar Matriz</button>
+
 
 <div id="divTable"></div>
 
-<button onclick="alerta({{matriz}});">Resolve</button>
+
+{% if resultMatriz %}
+    <div id="resultTable">{{resultMatriz}}</div>
+{% endif %}
+
+<script>
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+</script>
