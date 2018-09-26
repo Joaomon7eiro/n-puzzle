@@ -144,19 +144,19 @@ function createMatriz(){
 }
 
 function create_post() {
-    console.log("create post is working!") // sanity check
+    console.log("create post is working!")
 
     $.ajax({
-        url : "solve_puzzle/", // the endpoint
-        type : "POST", // http method
+        url : "solve_puzzle/",
+        type : "POST",
         data : {
             matriz : $('#matriz').val(),
             dimension : $('#dimension').val()
-        }, // data sent with the post request
-        // handle a successful response
+        },
+
         success : function(json) {
-            $('#matriz').val(''); // remove the value from the input
-            console.log(json); // log the returned json to the console
+            $('#matriz').val('');
+            console.log(json);
             matriz = json.result_list
 
             console.log(matriz)
