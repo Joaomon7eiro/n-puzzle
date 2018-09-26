@@ -42,4 +42,5 @@ class Agent:
         child_list = ranking(child_list, goal_state)
 
         all_nodes += child_list
+        print(len(all_nodes))
         return list + child_list, all_nodes

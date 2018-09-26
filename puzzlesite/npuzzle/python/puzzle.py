@@ -9,30 +9,13 @@ def main(string_array, dimension):
 
     list = [int(n) for n in string_array.split(",")]
 
-    print("lista", list)
-
-    print("dimensao", dimension)
-
-    # list = [[1, 2, 3],
-    #         [4, 0, 5],
-    #         [7, 8, 6]]
-    #
-    # dimension = 3
-    #
-
     list_formated = np.reshape(list, (dimension, dimension))
 
     list = list_formated.tolist()
 
-    print("matriz", list)
-
     agent = Agent()
 
-    #dimension = int(input("digite a dimensao da matrix:"))
-
     goal_state = create_n_n_matrix(dimension)
-
-    #goal_state = list
 
     # move = ["up", 'left', 'right', 'down']
     #
@@ -125,20 +108,10 @@ def main(string_array, dimension):
 
     html_list = []
 
-    html_list.append(node.state)
-    msg = "sucesso"
 
-    # print("1 - largura  \n2 - profundidade\n")
-    # op = input("digite a opcao de busca:")
-
-    # if op == "1":
     search_type = 0
     # if op == "2":
     #     search_type = -1
-
-    # if op != "2" and op != "1":
-    #     print("erro")
-    #     exit()
 
 
     while not success:
@@ -149,7 +122,6 @@ def main(string_array, dimension):
         node = node_list[search_type]
         success = agent.goal(node.state, goal_state)
 
-        html_list.append(node.state)
         print(node.ranking)
         print(node.action)
         count_process += 1
@@ -164,6 +136,16 @@ def main(string_array, dimension):
     # print("profundidade", node.depth)
     # print("tentativas", count_process)
 
+    html_list.append(node.state)
+
+    try:
+        while node.root.state != goal_state:
+
+            html_list.insert(0, node.root.state)
+
+            node = node.root
+    except:
+        print("final")
 
     return html_list
 

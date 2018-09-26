@@ -168,14 +168,19 @@ function create_post() {
                     current_result = matriz[k]
 
                     $("#table").remove()
-                    container.append("<table id='table' border='1'></table>")
+                    container.append("<table class='table table-bordered table-dark' id='table' border='1'></table>")
 
                     table = $("#table")
 
                     for(let i = 0; i< current_result.length ; i++){
                         table.append("<tr id='row"+i+"'/>")
                         for(let j = 0; j < current_result.length; j++){
-                            $("#row"+i).append(`<td>`+current_result[i][j]+`</td>`)
+                            if(current_result[i][j] == 0){
+                                $("#row"+i).append(`<td class="empty">`+current_result[i][j]+`</td>`)
+                            }else{
+                                $("#row"+i).append(`<td>`+current_result[i][j]+`</td>`)
+                            }
+
                         }
                     }
                   }, 1000 * k )
@@ -200,14 +205,19 @@ function appendNewMatriz(matriz, dimension){
 
     $("#table").remove()
 
-    container.append("<table id='table' border='1'></table>")
+    container.append("<table class='table table-bordered table-dark' id='table' border='1'></table>")
 
     table = $("#table")
 
     for(let i = 0; i< matriz.length ; i++){
         table.append("<tr id='row"+i+"'/>")
         for(let j = 0; j < matriz.length; j++){
-            $("#row"+i).append(`<td id='col${j}' onclick='move(${i},${j},[${matriz}], ${dimension});' >`+matriz[i][j]+`</td>`)
+            if(matriz[i][j]== 0){
+                $("#row"+i).append(`<td class='col${j} empty'  onclick='move(${i},${j},[${matriz}], ${dimension});' >`+matriz[i][j]+`</td>`)
+            }else{
+                $("#row"+i).append(`<td class='col${j}' onclick='move(${i},${j},[${matriz}], ${dimension});' >`+matriz[i][j]+`</td>`)
+            }
+
         }
     }
 
