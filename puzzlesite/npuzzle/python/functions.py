@@ -1,5 +1,5 @@
 from copy import deepcopy
-from node import Node
+from .node import Node
 from numpy import *
 
 

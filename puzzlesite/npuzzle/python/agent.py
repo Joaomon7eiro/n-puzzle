@@ -1,4 +1,4 @@
-from functions import find_number_row_and_col, next_node, search_equal_state, ranking
+from .functions import find_number_row_and_col, next_node, search_equal_state, ranking
 
 
 class Agent:
@@ -20,22 +20,22 @@ class Agent:
 
         if row_0 > 0:
             node1 = next_node(node, row_0, col_0, row_0 - 1, col_0, "down")
-            found = search_equal_state(node1.state, all_nodes)
+            found = search_equal_state(node1, all_nodes)
             if not found:
                 child_list.append(node1)
         if row_0 < dimension:
             node2 = next_node(node, row_0, col_0, row_0 + 1, col_0, "up")
-            found = search_equal_state(node2.state, all_nodes)
+            found = search_equal_state(node2, all_nodes)
             if not found:
                 child_list.append(node2)
         if col_0 > 0:
             node3 = next_node(node, row_0, col_0, row_0, col_0 - 1, "right")
-            found = search_equal_state(node3.state, all_nodes)
+            found = search_equal_state(node3, all_nodes)
             if not found:
                 child_list.append(node3)
         if col_0 < dimension:
             node4 = next_node(node, row_0, col_0, row_0, col_0 + 1, "left")
-            found = search_equal_state(node4.state, all_nodes)
+            found = search_equal_state(node4, all_nodes)
             if not found:
                 child_list.append(node4)
 
