@@ -26,4 +26,4 @@ def solve_puzzle(request):
             content_type="application/json"
         )
     else:
-        return HttpResponse("You're voting on question %s.")
+        return HttpResponse("nao autorizado")

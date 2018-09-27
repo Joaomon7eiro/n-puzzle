@@ -183,7 +183,7 @@ function create_post() {
 
                         }
                     }
-                  }, 1000 * k )
+                  }, 200 * k )
                })(k++)
             }
 
@@ -231,7 +231,9 @@ function appendNewMatriz(matriz, dimension){
     `)
     form.append(`<input type="hidden" class="form-control" id="dimension" placeholder="" value="${dimension}"
     name='dimension'>`)
-    form.append(`<input id="submit" type="submit" value="Resolver">`)
+    form.append(`<div class="input-group-append">
+                    <button id="submit" class="btn btn-outline-secondary" type="submit">Resolver</button>
+                </div>`)
 
     $("#solve").show()
 }
