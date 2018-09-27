@@ -14,5 +14,8 @@ body {
 #table {
     text-align: center;
     margin: 30px;
+    width:500px;
+    height:500px;
+    font-size: 25pt;
 }
 

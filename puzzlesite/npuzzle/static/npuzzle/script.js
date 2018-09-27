@@ -117,7 +117,7 @@ function move(row, col, matrizAsArray, dimension){
 function createMatriz(){
     let dimension = $("#dimension").val()
 
-    $("#stepOne").remove()
+    $("#divStep").remove()
 
     if(!dimension){
         dimension = 0;
@@ -160,6 +160,9 @@ function create_post() {
             matriz = json.result_list
 
             console.log(matriz)
+
+            $("#submit").remove()
+
 
             var k = 0
             while(k < matriz.length){
@@ -231,9 +234,9 @@ function appendNewMatriz(matriz, dimension){
     `)
     form.append(`<input type="hidden" class="form-control" id="dimension" placeholder="" value="${dimension}"
     name='dimension'>`)
-    form.append(`<div class="input-group-append">
+    form.append(`
                     <button id="submit" class="btn btn-outline-secondary" type="submit">Resolver</button>
-                </div>`)
+                `)
 
     $("#solve").show()
 }
