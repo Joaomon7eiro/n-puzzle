@@ -6,7 +6,7 @@ from numpy import *
 def ranking(node_list, goal):
 
     ranking_nodes = []
-    best_ranking = 100
+    best_ranking = 10000
 
     for node in node_list:
 

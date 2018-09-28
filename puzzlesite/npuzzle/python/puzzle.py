@@ -3,6 +3,7 @@ from .node import Node
 from .agent import Agent
 from .functions import format_matrix, find_number_row_and_col, next_node, create_n_n_matrix
 import numpy as np
+import operator
 
 def main(string_array, dimension):
 
@@ -119,11 +120,19 @@ def main(string_array, dimension):
 
         node_list, all_nodes = agent.next(node, node_list, dimension, goal_state, all_nodes)
 
+        node_list = sorted(node_list, key=lambda node_list: node_list.ranking, reverse=False)
+
+        for index, nodes in enumerate(node_list):
+            print("ranking {}, profundidade {}".format(nodes.ranking, nodes.depth))
+            if index == 10:
+                break
+
+        print("tamanho da lista".format(len(node_list)))
         node = node_list[search_type]
         success = agent.goal(node.state, goal_state)
 
-        print(node.ranking)
-        print(node.action)
+        print("no rank atual {} e acao {}".format(node.ranking, node.action))
+
         count_process += 1
 
 
@@ -136,6 +145,7 @@ def main(string_array, dimension):
     # print("profundidade", node.depth)
     # print("tentativas", count_process)
 
+    print("contagem", count_process)
     html_list.append(node.state)
 
     try:
