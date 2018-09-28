@@ -1,4 +1,4 @@
-from .queue import Priority_Queue
+from .queue import PriorityQueue
 from .node import Node
 from .agent import Agent
 from .functions import create_n_n_matrix, node_priority
@@ -20,21 +20,16 @@ def main(string_array, dimension):
     agent = Agent()
 
     # creating start node with default params
-    node = Node(shuffled_state, None, 0, "")
+    node = Node(shuffled_state, None, 0, "", 0)
 
     # defining the node priority
     node.priority = node_priority(node.state, goal_state)
 
-    node_priority_queue = Priority_Queue()
+    queue_node_priority = PriorityQueue()
 
-    node_priority_queue.push(node, node.priority)
-    #node_list = []
+    queue_node_priority.push(node, node.priority, node.created_index)
 
     all_nodes_created = []
-
-    #node_priority_queue.append(node)
-
-    goal_success = agent.goal(node.state, goal_state)
 
     # count with the tentatives
     count_process = 0
@@ -42,25 +37,20 @@ def main(string_array, dimension):
     # the states that will be printed on html
     html_list = []
 
-    while not goal_success:
+    while True:
         # pops the tested node that is not the goal
-        node_priority_queue.pop()
+        node = queue_node_priority.pop()
 
-        node_priority_queue, all_nodes_created = agent.next(node, node_priority_queue, dimension,
-                                                            goal_state, all_nodes_created)
-
-        #node_priority_queue = sorted(node_priority_queue, key=lambda node_list: node_list.priority, reverse=False)
-
-        for index, top_node in enumerate(node_priority_queue):
-            print("priority {}, profundidade {}".format(top_node.priority, top_node.depth))
-            if index == 10:
-                break
-
-        print("tamanho da lista".format(len(node_priority_queue)))
-        node = node_priority_queue[0]
         goal_success = agent.goal(node.state, goal_state)
 
-        print("no rank atual {} e acao {}".format(node.priority, node.action))
+        if goal_success:
+            break
+
+        queue_node_priority, all_nodes_created = agent.next(node, queue_node_priority, dimension,
+                                                            goal_state, all_nodes_created)
+
+        print("no rank atual {} e acao {} e profundidade {}".format(node.priority, node.action, node.depth))
+        print("quantidade total {}".format(len(all_nodes_created)))
 
         count_process += 1
 

@@ -61,9 +61,96 @@ $(function() {
 });
 
 
-function alerta(matriz){
-    alert(matriz)
+function createMatriz(){
+    let dimension = $("#dimension").val()
+
+    $("#divStep").remove()
+
+    if(!dimension){
+        dimension = 0;
+    }
+    console.log(dimension)
+
+    values = 1
+    matriz = []
+
+    for(let i = 0; i < dimension; i++){
+        line_values = []
+        for(let j=0; j < dimension ; j++){
+            line_values.push(values)
+            values ++
+        }
+        matriz.push(line_values)
+    }
+
+    matriz[dimension -1][dimension -1] = 0
+
+
+
+    appendNewMatriz(matriz, dimension)
 }
+
+function create_post() {
+    console.log("create post is working!")
+
+    $.ajax({
+        url : "solve_puzzle/",
+        type : "POST",
+        data : {
+            matriz : $('#matriz').val(),
+            dimension : $('#dimension').val()
+        },
+
+        success : function(json) {
+            $('#matriz').val('');
+            console.log(json);
+            matriz = json.result_list
+
+            console.log(matriz)
+
+            let container = $("#divTable")
+
+            $("#submit").remove()
+
+            $('#mydiv').hide().html('Some new text').fadeIn(1500);
+
+            var k = 0
+            while(k < matriz.length){
+                (function(k) {
+                  setTimeout(function() {
+                    current_result = matriz[k]
+
+                    //$("#table").remove()
+                    container.html("<table class='table table-bordered table-dark' id='table' border='1'></table>")
+
+                    table = $("#table")
+
+                    for(let i = 0; i< current_result.length ; i++){
+                        table.append("<tr id='row"+i+"'/>")
+                        for(let j = 0; j < current_result.length; j++){
+                            if(current_result[i][j] == 0){
+                                $("#row"+i).append(`<td class="empty">`+current_result[i][j]+`</td>`)
+                            }else{
+                                $("#row"+i).append(`<td>`+current_result[i][j]+`</td>`)
+                            }
+
+                        }
+                    }
+                  }, 200 * k )
+               })(k++)
+            }
+
+            console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#solve').html("<div class='alert-box alert radius' data-alert>Erro no processamento da resolucao"+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
 
 function move(row, col, matrizAsArray, dimension){
 
@@ -114,97 +201,10 @@ function move(row, col, matrizAsArray, dimension){
     }
 }
 
-function createMatriz(){
-    let dimension = $("#dimension").val()
-
-    $("#divStep").remove()
-
-    if(!dimension){
-        dimension = 0;
-    }
-    console.log(dimension)
-
-    values = 1
-    matriz = []
-
-    for(let i = 0; i < dimension; i++){
-        line_values = []
-        for(let j=0; j < dimension ; j++){
-            line_values.push(values)
-            values ++
-        }
-        matriz.push(line_values)
-    }
-
-    matriz[dimension -1][dimension -1] = 0
-
-
-
-    appendNewMatriz(matriz, dimension)
-}
-
-function create_post() {
-    console.log("create post is working!")
-
-    $.ajax({
-        url : "solve_puzzle/",
-        type : "POST",
-        data : {
-            matriz : $('#matriz').val(),
-            dimension : $('#dimension').val()
-        },
-
-        success : function(json) {
-            $('#matriz').val('');
-            console.log(json);
-            matriz = json.result_list
-
-            console.log(matriz)
-
-            $("#submit").remove()
-
-
-            var k = 0
-            while(k < matriz.length){
-                (function(k) {
-                  setTimeout(function() {
-                    current_result = matriz[k]
-
-                    $("#table").remove()
-                    container.append("<table class='table table-bordered table-dark' id='table' border='1'></table>")
-
-                    table = $("#table")
-
-                    for(let i = 0; i< current_result.length ; i++){
-                        table.append("<tr id='row"+i+"'/>")
-                        for(let j = 0; j < current_result.length; j++){
-                            if(current_result[i][j] == 0){
-                                $("#row"+i).append(`<td class="empty">`+current_result[i][j]+`</td>`)
-                            }else{
-                                $("#row"+i).append(`<td>`+current_result[i][j]+`</td>`)
-                            }
-
-                        }
-                    }
-                  }, 200 * k )
-               })(k++)
-            }
-
-            console.log("success"); // another sanity check
-        },
-
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-            $('#solve').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        }
-    });
-};
 
 function appendNewMatriz(matriz, dimension){
-    container = $("#divTable")
-    var csrfVar = $('meta[name="csrf-token"]').attr('content');
+    let container = $("#divTable")
+    let csrfVar = $('meta[name="csrf-token"]').attr('content');
 
     $("#table").remove()
 
