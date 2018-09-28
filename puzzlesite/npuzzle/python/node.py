@@ -4,7 +4,7 @@ class Node:
     state = []
     path_cost = 1
     depth = 0
-    ranking = 0 #the less the better
+    priority = 0 #the less the better
 
     def __init__(self, list, root, deep, action):
         self.root = root

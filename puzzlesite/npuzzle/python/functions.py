@@ -3,6 +3,27 @@ from .node import Node
 from numpy import *
 
 
+def node_priority(node_state, goal):
+    priority = 0
+
+    for value in node_state:
+        # if value == 0:
+        #     continue
+        value_row, value_col = find_number_row_and_col(node_state, value)
+        goal_row, goal_col = find_number_row_and_col(goal, value)
+
+        if goal_row >= value_row:
+            priority += goal_row - value_row
+        else:
+            priority += value_row - goal_row
+
+        if goal_col >= value_col:
+            priority += goal_col - value_col
+        else:
+            priority += value_col - goal_col
+
+    return priority
+
 def ranking(node_list, goal):
 
     ranking_nodes = []
@@ -14,11 +35,10 @@ def ranking(node_list, goal):
         for row_values in node.state:
 
             for value in row_values:
-                if value == 0:
-                    continue
+                # if value == 0:
+                #     continue
                 value_row, value_col = find_number_row_and_col(node.state, value)
                 goal_row, goal_col = find_number_row_and_col(goal, value)
-
 
                 if goal_row >= value_row:
                     ranking += goal_row - value_row

@@ -1,6 +1,6 @@
 .empty {
-    background-color: #00f !important;
-    color: #fff  !important;
+    background: linear-gradient(to bottom right, #fff, #ddd, #aaa);
+    color: #000  !important;
 }
 
 
@@ -17,5 +17,6 @@ body {
     width:500px;
     height:500px;
     font-size: 25pt;
+    font-weight: bold;
 }
 

@@ -1,18 +1,17 @@
 import heapq
 
-class PriorityQueue:
+class Priority_Queue:
 
     def __init__(self):
         self.nodes_queue = []
 
-    def push(self, node, ranking):
-        best_node = ranking, node
+    def push(self, node, priority):
+        best_node = priority, node
 
         heapq.heappush(self.nodes_queue, best_node)
 
     def pop(self):
-        ranking, node = heapq.heappop(self.nodes_queue)
+        (priority, node) = heapq.heappop(self.nodes_queue)
 
         return node
-
 
