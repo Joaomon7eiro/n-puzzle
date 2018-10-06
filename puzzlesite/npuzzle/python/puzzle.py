@@ -49,10 +49,13 @@ def main(string_array, dimension):
         queue_node_priority, all_nodes_created = agent.next(node, queue_node_priority, dimension,
                                                             goal_state, all_nodes_created)
 
-        print("no rank atual {} e acao {} e profundidade {}".format(node.priority, node.action, node.depth))
-        print("quantidade total {}".format(len(all_nodes_created)))
+        #print("no rank atual {} e acao {} e profundidade {}".format(node.priority, node.action, node.depth))
+        #print("quantidade total {}".format(len(all_nodes_created)))
 
         count_process += 1
+
+        if count_process == 1000:
+            print("limite")
 
     print("contagem", count_process)
 
