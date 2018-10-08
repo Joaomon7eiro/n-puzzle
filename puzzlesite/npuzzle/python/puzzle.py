@@ -48,29 +48,34 @@ def main(string_array, dimension, search_type_choice):
         search_type = -1
 
     while True:
+        if len(node_list) < 1:
+            break
         # pops the tested node that is not the goal
         if search_type_choice == '5':
             node = node_list.pop()
         else:
             node = node_list.pop(search_type)
 
+        print(node_list)
         goal_success = agent.goal(node.state, goal_state)
 
         if goal_success:
             break
 
+        if search_type_choice == '3' and count_process == 1000:
+            continue
+
+        count_process += 1
         node_list, all_nodes_created = agent.next(node, node_list, dimension, goal_state, all_nodes_created,
                                                   search_type_choice)
 
         #print("no rank atual {} e acao {} e profundidade {}".format(node.priority, node.action, node.depth))
         #print("quantidade total {}".format(len(all_nodes_created)))
 
-        count_process += 1
 
-        if search_type_choice == '3':
-            if count_process == 1000:
-                print("limite")
-                break
+
+
+
 
     print("contagem", count_process)
 
