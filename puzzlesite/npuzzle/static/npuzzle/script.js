@@ -113,14 +113,13 @@ function solve() {
                })(k++)
             }
 
-            $('.container').append("<button class='btn btn-primary' onclick='location.reload();'>Refazer</button>")
+            $('.container').append("<button class='btn btn-secondary' onclick='location.reload();'>Refazer</button>")
             console.log("success");
         },
 
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
-            $('#solve').html("<div class='alert-box alert radius' data-alert>Erro no processamento da resolucao"+errmsg+
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            $('#solve').html("<div class='alert-box alert radius' data-alert>Erro no processamento da resolucao <button class='btn btn-secondary' onclick='location.reload();'>Refazer</button></div>"); // add the error to the dom
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });

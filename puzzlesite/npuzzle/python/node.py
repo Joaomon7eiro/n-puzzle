@@ -1,15 +1,17 @@
+import numpy as np
+
 class Node:
     root = None
     action = ""
-    state = []
+    state = np.array([])
     path_cost = 1
     depth = 0
     priority = 0 # the less the better
     created_index = 0
 
-    def __init__(self, list, root, deep, action, created_index):
+    def __init__(self, state, root, deep, action, created_index):
         self.root = root
-        self.state = list
+        self.state = state
         self.depth = deep
         self.action = action
         self.created_index = created_index

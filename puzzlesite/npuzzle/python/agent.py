@@ -1,11 +1,12 @@
 from .functions import find_number_row_and_col, move_node, search_equal_state, node_priority
+import numpy as np
 
 
 class Agent:
 
     def goal(self, current_state, goal_state):
 
-        if current_state == goal_state:
+        if np.array_equal(current_state, goal_state):
             return True
         else:
             return False
@@ -23,10 +24,11 @@ class Agent:
             if search_type_choice == "5":
                 found = search_equal_state(node_down, all_nodes_created)
                 if not found:
-                    all_nodes_created.append(node_down)
                     node_list.push(node_down, node_down.priority, node_down.created_index)
             else:
                 node_list.append(node_down)
+
+            all_nodes_created.append(node_down)
 
         if row_0 < dimension:
             node_up = move_node(node, row_0, col_0, row_0 + 1, col_0, "up", len(all_nodes_created))
@@ -35,10 +37,11 @@ class Agent:
             if search_type_choice == "5":
                 found = search_equal_state(node_up, all_nodes_created)
                 if not found:
-                    all_nodes_created.append(node_up)
                     node_list.push(node_up, node_up.priority, node_up.created_index)
             else:
                 node_list.append(node_up)
+
+            all_nodes_created.append(node_up)
 
         if col_0 > 0:
             node_right = move_node(node, row_0, col_0, row_0, col_0 - 1, "right", len(all_nodes_created))
@@ -47,10 +50,11 @@ class Agent:
             if search_type_choice == "5":
                 found = search_equal_state(node_right, all_nodes_created)
                 if not found:
-                    all_nodes_created.append(node_right)
                     node_list.push(node_right, node_right.priority, node_right.created_index)
             else:
                 node_list.append(node_right)
+
+            all_nodes_created.append(node_right)
 
         if col_0 < dimension:
             node_left = move_node(node, row_0, col_0, row_0, col_0 + 1, "left", len(all_nodes_created))
@@ -59,9 +63,10 @@ class Agent:
             if search_type_choice == "5":
                 found = search_equal_state(node_left, all_nodes_created)
                 if not found:
-                    all_nodes_created.append(node_left)
                     node_list.push(node_left, node_left.priority, node_left.created_index)
             else:
                 node_list.append(node_left)
+
+            all_nodes_created.append(node_left)
 
         return node_list, all_nodes_created

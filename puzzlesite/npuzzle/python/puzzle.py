@@ -10,16 +10,12 @@ def main(string_array, dimension, search_type_choice):
     start_time = time.time()
     # split the string array received from javascript to int list
     shuffled_state_array = [int(n) for n in string_array.split(",")]
-    shuffled_state_matrix = np.reshape(shuffled_state_array, (dimension, dimension))
-
-    # transform numpy array to list !NEED ATTENTION TO FIX LATER
-    shuffled_state = shuffled_state_matrix.tolist()
+    shuffled_state = np.reshape(shuffled_state_array, (dimension, dimension))
 
     # creates the goal state based on the given dimension
     goal_state = create_n_n_matrix(dimension)
 
     agent = Agent()
-
 
     # creating start node with default params
     node = Node(shuffled_state, None, 0, "", 0)
@@ -47,50 +43,50 @@ def main(string_array, dimension, search_type_choice):
     else:
         search_type = -1
 
+    iterative = 10
     while True:
-        if len(node_list) < 1:
-            break
+        count_process += 1
+
+        if search_type_choice != '5':
+            if len(node_list) < 1:
+                if search_type_choice == '3':
+                    break
+                else:
+                    print('zerou')
+                    iterative *= 2
+                    node = Node(shuffled_state, None, 0, "", 0)
+                    node.priority = node_priority(node.state, goal_state)
+                    node_list = list()
+                    node_list.append(node)
+
         # pops the tested node that is not the goal
         if search_type_choice == '5':
             node = node_list.pop()
         else:
             node = node_list.pop(search_type)
 
-        print(node_list)
         goal_success = agent.goal(node.state, goal_state)
 
         if goal_success:
             break
 
-        if search_type_choice == '3' and count_process == 1000:
+        if (search_type_choice == '3' or search_type_choice == '4') and node.depth + 1 == iterative:
             continue
 
-        count_process += 1
         node_list, all_nodes_created = agent.next(node, node_list, dimension, goal_state, all_nodes_created,
                                                   search_type_choice)
 
-        #print("no rank atual {} e acao {} e profundidade {}".format(node.priority, node.action, node.depth))
-        #print("quantidade total {}".format(len(all_nodes_created)))
-
-
-
-
-
-
     print("contagem", count_process)
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print("--- %s segundos ---" % (time.time() - start_time))
 
-    html_list.append(node.state)
-
+    html_list.append(node.state.tolist())
     try:
-        while node.root.state != goal_state:
-
-            html_list.insert(0, node.root.state)
+        while not np.array_equal(node.root.state, goal_state):
+            html_list.insert(0, node.root.state.tolist())
 
             node = node.root
     except:
         print("final")
 
     return html_list
-
