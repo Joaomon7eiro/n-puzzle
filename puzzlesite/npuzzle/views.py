@@ -17,7 +17,9 @@ def solve_puzzle(request):
     if request.method == 'POST':
         matriz = request.POST.get('matriz')
         dimension = request.POST.get('dimension')
-        result = main(matriz, int(dimension))
+        search_type = request.POST.get('search_type')
+
+        result = main(matriz, int(dimension), search_type)
         result_list = {
             'result_list': result
         }

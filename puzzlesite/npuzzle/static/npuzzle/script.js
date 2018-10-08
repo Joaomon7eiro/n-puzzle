@@ -70,7 +70,8 @@ function solve() {
         type : "POST",
         data : {
             matriz : $('#matriz').val(),
-            dimension : $('#dimension').val()
+            dimension : $('#dimension').val(),
+            search_type: $('input[name=optradio]:checked', '#post-form').val()
         },
 
         success : function(json) {
@@ -112,6 +113,7 @@ function solve() {
                })(k++)
             }
 
+            $('.container').append("<button class='btn btn-primary' onclick='location.reload();'>Refazer</button>")
             console.log("success");
         },
 
@@ -229,6 +231,7 @@ function appendNewMatriz(matriz, dimension){
     $("#submit").remove()
     $("#matriz").remove()
     $("#dimension").remove()
+    $("#radios").remove()
     form = $("#post-form")
     form.append(`
     <input type="hidden" class="form-control" id="matriz" placeholder="" value='${matriz}'
@@ -236,6 +239,24 @@ function appendNewMatriz(matriz, dimension){
     `)
     form.append(`<input type="hidden" class="form-control" id="dimension" placeholder="" value="${dimension}"
     name='dimension'>`)
+
+    form.append(`<div id="radios">
+            <div>
+                <label class="radio"><input type="radio" name="optradio" value=1 checked>Largura</label>
+            </div>
+            <div>
+                <label class="radio"><input type="radio" name="optradio" value=2 >Profundidade</label>
+            </div>
+            <div>
+                <label class="radio"><input type="radio" name="optradio" value=3 >Profundidade Limitada</label>
+            </div>
+            <div>
+                <label class="radio"><input type="radio" name="optradio" value=4 >Profundidade Iterativa</label>
+            </div>
+            <div>
+                <label class="radio"><input type="radio" name="optradio" value=5 >Prioridade</label>
+            </div>
+        </div>`)
     form.append(`
                     <button id="submit" class="btn btn-outline-secondary" type="submit">Resolver</button>
                 `)
