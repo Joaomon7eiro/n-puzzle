@@ -15,14 +15,16 @@
 
   <body class="container">
 
+    <h1 id="title">N-Puzzle !</h1>
+
     <div id="divStep" class="d-flex justify-content-center">
         <div id="stepOne" class="d-flex flex-column justify-content-around align-items-center p-2">
 
             <div class="input-group mb-3">
-                <input type="number" id="dimension" class="form-control" min="2" placeholder="Dimensao da matriz...">
+                <input type="number" id="matrixDimension" class="form-control" min="2" placeholder="Dimensao da matriz...">
 
                 <div class="input-group-append">
-                    <button id="create" onclick="createMatriz();" class="btn btn-outline-secondary" type="button">Gerar Matriz</button>
+                    <button id="create" onclick="createMatrix();" class="btn btn-outline-secondary" type="button">Gerar Matriz</button>
                 </div>
             </div>
 
@@ -32,9 +34,33 @@
     <div id="divTable" class="d-flex" ></div>
 
     <div id="solve" style="display: none;">
+        <h2>Escolha o metodo de Busca</h2>
+
         <form id="post-form" action="solve_puzzle/" method="post">
             {% csrf_token %}
 
+            <div id="radios">
+
+                <div>
+
+                    <label class="radio"><input type="radio" name="optradio" value=1 checked />Largura</label>
+                </div>
+                <div>
+                    <label class="radio"><input type="radio" name="optradio" value=2 />Profundidade</label>
+                </div>
+                <div>
+                    <input type="radio" id="limited" name="optradio" value=3 />
+                    <div class="hint">Digite o Limite de iteracoes: <input type="number" id="limit"/></div>
+                    <label class="radio" for="limited">Profundidade Limitada</label>
+                </div>
+                <div>
+                    <label class="radio"><input type="radio" name="optradio" value=4 />Profundidade Iterativa</label>
+                </div>
+                <div>
+                    <label class="radio"><input type="radio" name="optradio" value=5 />Prioridade</label>
+                </div>
+            </div>
+            <button id="submit" class="btn btn-outline-secondary" type="submit">Resolver</button>
         </form>
     </div>
 

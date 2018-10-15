@@ -65,21 +65,32 @@ $(function() {
 function solve() {
     console.log("solve called!")
 
+    $('.container').append("<h1 id='loading'> Aguarde a resolucao do puzzle...</h1><h1>voce pode checar o console para verificar o processamento </h1>")
+
     $.ajax({
         url : "solve_puzzle/",
         type : "POST",
         data : {
-            matriz : $('#matriz').val(),
+            matrix : $('#matrix').val(),
             dimension : $('#dimension').val(),
-            search_type: $('input[name=optradio]:checked', '#post-form').val()
+            search_type: $('input[name=optradio]:checked', '#post-form').val(),
+            limit: $('#limit').val()
         },
 
         success : function(json) {
-            $('#matriz').val('');
             console.log(json);
-            matriz = json.result_list
 
-            console.log(matriz)
+            $("#loading").remove()
+
+            $("#solve").remove()
+
+            matrix = json.matrix_list
+            time_spent = json.time_spent
+            nodes_processed = json.nodes_processed
+
+            console.log(matrix)
+            console.log(time_spent)
+            console.log(nodes_processed)
 
             let container = $("#divTable")
 
@@ -88,10 +99,10 @@ function solve() {
             //$('#mydiv').hide().html('Some new text').fadeIn(1500);
 
             var k = 0
-            while(k < matriz.length){
+            while(k < matrix.length){
                 (function(k) {
                   setTimeout(function() {
-                    current_result = matriz[k]
+                    current_result = matrix[k]
 
                     //$("#table").remove()
                     container.html("<table class='table table-bordered table-dark' id='table' border='1'></table>")
@@ -112,6 +123,8 @@ function solve() {
                   }, 200 * k )
                })(k++)
             }
+            $('.container').append(`<h3> Tempo decorrido : ${time_spent} segundos</h3>`)
+            $('.container').append(`<h3> Nos testados : ${nodes_processed}</h3>`)
 
             $('.container').append("<button class='btn btn-secondary' onclick='location.reload();'>Refazer</button>")
             console.log("success");
@@ -126,18 +139,20 @@ function solve() {
 };
 
 
-function createMatriz(){
-    let dimension = $("#dimension").val()
+function createMatrix(){
+
+    let dimension = $("#matrixDimension").val()
+
+    $("#title").html(`<h1 id="title">Embaralhe a matriz</h1>`)
 
     $("#divStep").remove()
 
     if(!dimension){
         dimension = 0;
     }
-    console.log(dimension)
 
     values = 1
-    matriz = []
+    matrix = []
 
     for(let i = 0; i < dimension; i++){
         line_values = []
@@ -145,34 +160,68 @@ function createMatriz(){
             line_values.push(values)
             values ++
         }
-        matriz.push(line_values)
+        matrix.push(line_values)
     }
 
-    matriz[dimension -1][dimension -1] = 0
+    matrix[dimension -1][dimension -1] = 0
 
 
 
-    appendNewMatriz(matriz, dimension)
+    appendNewMatrix(matrix, dimension)
 }
 
-function move(row, col, matrizAsArray, dimension){
 
-    matriz = []
+function appendNewMatrix(matrix, dimension){
+    let container = $("#divTable")
+    let csrfVar = $('meta[name="csrf-token"]').attr('content');
+
+    $("#table").remove()
+
+    container.append("<table class='table table-bordered table-dark' id='table' border='1'></table>")
+
+    table = $("#table")
+
+    for(let i = 0; i< matrix.length ; i++){
+        table.append("<tr id='row"+i+"'/>")
+        for(let j = 0; j < matrix.length; j++){
+            if(matrix[i][j]== 0){
+                $("#row"+i).append(`<td class='col${j} empty' onclick='move(${i},${j},[${matrix}], ${dimension});' >`+matrix[i][j]+`</td>`)
+            }else{
+                $("#row"+i).append(`<td class='col${j}' onclick='move(${i},${j},[${matrix}], ${dimension});' >`+matrix[i][j]+`</td>`)
+            }
+
+        }
+    }
+
+
+    $("#matrix").remove()
+    $("#dimension").remove()
+
+    $("#post-form").append(`<input type="hidden" class="form-control" id="matrix" placeholder="" value='${matrix}' name='matrix'>`)
+    $("#post-form").append(`<input type="hidden" class="form-control" id="dimension" placeholder="" value="${dimension}" name='dimension'>`)
+
+    $("#solve").show()
+}
+
+
+function move(row, col, matrixAsArray, dimension){
+
+    matrix = []
     row_values = []
-    for(let i= 0, j=0 ; i <= matrizAsArray.length ; i++, j++){
+    for(let i= 0, j=0 ; i <= matrixAsArray.length ; i++, j++){
         if(j == dimension){
-            matriz.push(row_values)
+            matrix.push(row_values)
             row_values = []
             j = 0
         }
-        row_values.push(matrizAsArray[i])
+        row_values.push(matrixAsArray[i])
     }
 
     let distance = 0
-    for(let i = 0; i < matriz.length; i++) {
-        for(let j=0; j < matriz[0].length; j++){
+    for(let i = 0; i < matrix.length; i++) {
+        for(let j=0; j < matrix[0].length; j++){
 
-            if(matriz[i][j] == 0){
+            if(matrix[i][j] == 0){
                 row0 = i;
                 col0 = j;
             }
@@ -196,69 +245,10 @@ function move(row, col, matrizAsArray, dimension){
     if(distance > 1){
         console.log("movimento invalido")
     }else{
-        matriz[row0][col0] = matriz[row][col]
-        matriz[row][col] = 0
+        matrix[row0][col0] = matrix[row][col]
+        matrix[row][col] = 0
 
-        console.log(matriz)
-        appendNewMatriz(matriz, dimension)
+        console.log(matrix)
+        appendNewMatrix(matrix, dimension)
     }
-}
-
-
-function appendNewMatriz(matriz, dimension){
-    let container = $("#divTable")
-    let csrfVar = $('meta[name="csrf-token"]').attr('content');
-
-    $("#table").remove()
-
-    container.append("<table class='table table-bordered table-dark' id='table' border='1'></table>")
-
-    table = $("#table")
-
-    for(let i = 0; i< matriz.length ; i++){
-        table.append("<tr id='row"+i+"'/>")
-        for(let j = 0; j < matriz.length; j++){
-            if(matriz[i][j]== 0){
-                $("#row"+i).append(`<td class='col${j} empty'  onclick='move(${i},${j},[${matriz}], ${dimension});' >`+matriz[i][j]+`</td>`)
-            }else{
-                $("#row"+i).append(`<td class='col${j}' onclick='move(${i},${j},[${matriz}], ${dimension});' >`+matriz[i][j]+`</td>`)
-            }
-
-        }
-    }
-
-    $("#submit").remove()
-    $("#matriz").remove()
-    $("#dimension").remove()
-    $("#radios").remove()
-    form = $("#post-form")
-    form.append(`
-    <input type="hidden" class="form-control" id="matriz" placeholder="" value='${matriz}'
-         name='matriz'>
-    `)
-    form.append(`<input type="hidden" class="form-control" id="dimension" placeholder="" value="${dimension}"
-    name='dimension'>`)
-
-    form.append(`<div id="radios">
-            <div>
-                <label class="radio"><input type="radio" name="optradio" value=1 checked>Largura</label>
-            </div>
-            <div>
-                <label class="radio"><input type="radio" name="optradio" value=2 >Profundidade</label>
-            </div>
-            <div>
-                <label class="radio"><input type="radio" name="optradio" value=3 >Profundidade Limitada</label>
-            </div>
-            <div>
-                <label class="radio"><input type="radio" name="optradio" value=4 >Profundidade Iterativa</label>
-            </div>
-            <div>
-                <label class="radio"><input type="radio" name="optradio" value=5 >Prioridade</label>
-            </div>
-        </div>`)
-    form.append(`
-                    <button id="submit" class="btn btn-outline-secondary" type="submit">Resolver</button>
-                `)
-
-    $("#solve").show()
 }

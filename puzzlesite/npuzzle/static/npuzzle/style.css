@@ -1,6 +1,5 @@
 .empty {
-    background: linear-gradient(to bottom right, #fff, #ddd, #aaa);
-    color: #000  !important;
+    background-color: #fff;
 }
 
 
@@ -23,3 +22,10 @@ body {
 #table td {
     min-width: 150px;
 }
+
+.hint { display: none; color: gray; font-style: italic; }
+
+
+input#limited:checked + .hint { display :  block }
+
+label.radio:focus + .hint { display :  block }

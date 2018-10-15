@@ -15,16 +15,19 @@ def index(request):
 
 def solve_puzzle(request):
     if request.method == 'POST':
-        matriz = request.POST.get('matriz')
+        matrix = request.POST.get('matrix')
         dimension = request.POST.get('dimension')
         search_type = request.POST.get('search_type')
+        limit = request.POST.get('limit')
 
-        result = main(matriz, int(dimension), search_type)
-        result_list = {
-            'result_list': result
+        matrix_list, nodes_processed, time_spent = main(matrix, int(dimension), search_type, limit)
+        results = {
+            'matrix_list': matrix_list,
+            'nodes_processed': nodes_processed,
+            'time_spent': time_spent
         }
         return HttpResponse(
-            json.dumps(result_list),
+            json.dumps(results),
             content_type="application/json"
         )
     else:
