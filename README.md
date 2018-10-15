@@ -17,11 +17,11 @@ com  ((n * n) - 1) quadrados, numerados de 1 a N. Sua tarefa é reposicionar as 
 
 ### Instalaçao
 
-Clone o projeto e instale os pacotes com os comandos no terminal:
-
-  _pip install django numpy_
+* Clone o projeto: _git clone https://github.com/Joaomon7eiro/n-puzzle.git_
+* Acesse a Pasta do Projeto: _cd n-puzzle_
+* Instale os Pacotes do Python:  _pip install django numpy_
 
 ## Rodando
   * Entre na pasta puzzlesite com o comando: _cd puzzlesite_
-  * Use o comando no terminal: _python3 manage.py runserver_
+  * Use o comando no terminal para iniciar o servidor: _python3 manage.py runserver_
   * Acesse: http://localhost:8000/npuzzle/
