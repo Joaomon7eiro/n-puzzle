@@ -65,7 +65,6 @@ def main(string_array, dimension, search_type_choice, limit):
                     print('-----------------------excluiu a lista e aumentou o limite({})-----------------------'.format(limit))
                     node = Node(shuffled_state, None, 0, "", 0)
                     node.priority = node_priority(node.state, goal_state)
-                    node_list = list()
                     node_list.append(node)
 
         # pops the tested node

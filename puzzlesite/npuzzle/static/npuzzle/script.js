@@ -65,7 +65,7 @@ $(function() {
 function solve() {
     console.log("solve called!")
 
-    $('.container').append("<h1 id='loading'> Aguarde a resolucao do puzzle...</h1><h1>voce pode checar o console para verificar o processamento </h1>")
+    $('.container').append("<h1 id='loading'>Aguarde a resolução do puzzle...</h1><h1>Você pode checar o console para verificar o processamento </h1>")
 
     $.ajax({
         url : "solve_puzzle/",
@@ -132,7 +132,7 @@ function solve() {
 
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
-            $('#solve').html("<div class='alert-box alert radius' data-alert>Erro no processamento da resolucao <button class='btn btn-secondary' onclick='location.reload();'>Refazer</button></div>"); // add the error to the dom
+            $('#solve').html("<div class='alert-box alert radius' data-alert>Erro no processamento da resolução <button class='btn btn-secondary' onclick='location.reload();'>Refazer</button></div>"); // add the error to the dom
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
