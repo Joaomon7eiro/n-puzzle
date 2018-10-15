@@ -17,7 +17,8 @@ com  ((n * n) - 1) quadrados, numerados de 1 a N. Sua tarefa é reposicionar as 
 
 ### Instalaçao
 
-Clone o projeto e instale os pacotes com os comandos no terminal:
+#### Clone o projeto e instale os pacotes com os comandos no terminal:
+
   pip install django numpy
 
 End with an example of getting some data out of the system or using it for a little demo
