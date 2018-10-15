@@ -22,6 +22,6 @@ com  ((n * n) - 1) quadrados, numerados de 1 a N. Sua tarefa é reposicionar as 
   pip install django numpy
 
 ## Rodando
-  entre na pasta puzzlesite (cd puzzlesite)
-  use o comando no terminal : python3 manage.py runserver
-  acesse: http://localhost:8000/npuzzle/
+  * entre na pasta puzzlesite, comando: cd puzzlesite
+  * use o comando no terminal: python3 manage.py runserver
+  * acesse: http://localhost:8000/npuzzle/
