@@ -17,9 +17,9 @@ com  ((n * n) - 1) quadrados, numerados de 1 a N. Sua tarefa é reposicionar as 
 
 ### Instalaçao
 
-#### Clone o projeto e instale os pacotes com os comandos no terminal:
+##### Clone o projeto e instale os pacotes com os comandos no terminal:
 
-  pip install django numpy
+  _pip install django numpy_
 
 ## Rodando
   * Entre na pasta puzzlesite com o comando: _cd puzzlesite_
