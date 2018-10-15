@@ -11,9 +11,9 @@ com  ((n * n) - 1) quadrados, numerados de 1 a N. Sua tarefa é reposicionar as 
 * [Bootstrap](http://getbootstrap.com/docs/4.1/getting-started/introduction/) - estilo da página.
 
 ### Pre Requisitos
-*Python 3
-*DJango
-*Numpy
+* Python 3
+* DJango
+* Numpy
 
 ### Instalaçao
 
