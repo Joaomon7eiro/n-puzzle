@@ -27,6 +27,24 @@ def node_priority(node_state, goal_state):
     return priority
 
 
+def state_disogarnized(node_state, goal_state):
+
+    count = 0
+
+    for row_values in node_state:
+
+        for value in row_values:
+            if value == 0:
+                continue
+            value_row, value_col = find_number_row_and_col(node_state, value)
+            goal_row, goal_col = find_number_row_and_col(goal_state, value)
+
+            if value_col != goal_col or value_row != goal_row:
+                count += 1
+
+    return count
+
+
 def search_equal_state(child_node, all_nodes):
 
     for node in all_nodes:

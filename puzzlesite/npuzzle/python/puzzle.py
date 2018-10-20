@@ -1,7 +1,7 @@
 from .queue import PriorityQueue
 from .node import Node
 from .agent import Agent
-from .functions import create_n_n_matrix, node_priority
+from .functions import create_n_n_matrix, node_priority, state_disogarnized
 import numpy as np
 import time
 
@@ -22,6 +22,12 @@ def main(string_array, dimension, search_type_choice, limit):
     shuffled_state_array = [int(n) for n in string_array.split(",")]
     shuffled_state = np.reshape(shuffled_state_array, (dimension, dimension))
 
+    shuffled_state = np.array([
+        [4, 0, 2],
+        [5, 6, 8],
+        [1, 7, 3]
+    ])
+
     # creates the goal state based on the given dimension
     goal_state = create_n_n_matrix(dimension)
 
@@ -32,6 +38,9 @@ def main(string_array, dimension, search_type_choice, limit):
 
     # defining the node priority (only used in method 5)
     node.priority = node_priority(node.state, goal_state)
+
+    #node.priority = state_disogarnized(node.state, goal_state)
+
 
     if search_type_choice == '5':
         node_list = PriorityQueue()
@@ -65,6 +74,8 @@ def main(string_array, dimension, search_type_choice, limit):
                     print('-----------------------excluiu a lista e aumentou o limite({})-----------------------'.format(limit))
                     node = Node(shuffled_state, None, 0, "", 0)
                     node.priority = node_priority(node.state, goal_state)
+
+                    #node.priority = state_disogarnized(node.state, goal_state)
                     node_list.append(node)
 
         # pops the tested node
@@ -100,4 +111,5 @@ def main(string_array, dimension, search_type_choice, limit):
     except:
         print("final")
 
+    print(len(html_list))
     return html_list, count_process, time_spent

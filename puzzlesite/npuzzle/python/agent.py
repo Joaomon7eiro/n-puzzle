@@ -1,4 +1,4 @@
-from .functions import find_number_row_and_col, move_node, search_equal_state, node_priority
+from .functions import find_number_row_and_col, move_node, search_equal_state, node_priority, state_disogarnized
 import numpy as np
 
 
@@ -20,6 +20,7 @@ class Agent:
         if row_0 > 0:
             node_down = move_node(node, row_0, col_0, row_0 - 1, col_0, "down", len(all_nodes_created))
             node_down.priority = node_priority(node_down.state, goal_state)
+            #node_down.priority = state_disogarnized(node.state, goal_state)
 
             if search_type_choice == "5":
                 found = search_equal_state(node_down, all_nodes_created)
@@ -33,6 +34,7 @@ class Agent:
         if row_0 < dimension:
             node_up = move_node(node, row_0, col_0, row_0 + 1, col_0, "up", len(all_nodes_created))
             node_up.priority = node_priority(node_up.state, goal_state)
+            #node_up.priority = state_disogarnized(node.state, goal_state)
 
             if search_type_choice == "5":
                 found = search_equal_state(node_up, all_nodes_created)
@@ -46,6 +48,7 @@ class Agent:
         if col_0 > 0:
             node_right = move_node(node, row_0, col_0, row_0, col_0 - 1, "right", len(all_nodes_created))
             node_right.priority = node_priority(node_right.state, goal_state)
+            #node_right.priority = state_disogarnized(node.state, goal_state)
 
             if search_type_choice == "5":
                 found = search_equal_state(node_right, all_nodes_created)
@@ -59,6 +62,7 @@ class Agent:
         if col_0 < dimension:
             node_left = move_node(node, row_0, col_0, row_0, col_0 + 1, "left", len(all_nodes_created))
             node_left.priority = node_priority(node_left.state, goal_state)
+            #node_left.priority = state_disogarnized(node.state, goal_state)
 
             if search_type_choice == "5":
                 found = search_equal_state(node_left, all_nodes_created)

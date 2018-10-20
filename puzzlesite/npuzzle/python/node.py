@@ -7,6 +7,7 @@ class Node:
     path_cost = 1
     depth = 0
     priority = 0 # the less the better
+    disorganized = 0 # the less the better
     created_index = 0
 
     def __init__(self, state, root, deep, action, created_index):
