@@ -1,13 +1,50 @@
 from .queue import PriorityQueue
 from .node import Node
 from .agent import Agent
-from .functions import create_n_n_matrix, node_priority, state_disogarnized
+from .functions import node_priority
 import numpy as np
 import time
 
+from pympler.asizeof import asizeof
 
-def main(string_array, dimension, search_type_choice, limit):
 
+def create_n_n_matrix(dimension):
+
+    goal_list = np.arange(1, dimension*dimension + 1).reshape(dimension, dimension)
+    goal_list[-1, -1] = 0
+
+    return goal_list
+
+
+def breadth_search(agent, shuffled_state, goal_state, count_process, dimension):
+
+    node = Node(shuffled_state, None, 0, "", 0)
+
+    node_list = list()
+    node_list.append(node)
+
+    while True:
+        node = node_list.pop(0)
+
+        goal_success = agent.goal(node.state, goal_state)
+
+        count_process += 1
+
+        #print("acao {} profundidade {}".format(node.action, node.depth))
+
+        if goal_success:
+            break
+
+        node_list = agent.next(node, node_list, dimension)
+
+    return node, count_process
+
+
+def depth_search(agent, shuffled_state, goal_state, count_process, dimension, search_type_choice, limit):
+    node = Node(shuffled_state, None, 0, "", 0)
+
+    node_list = list()
+    node_list.append(node)
     if search_type_choice == '3':
         if limit == '':
             limit = 0
@@ -16,6 +53,72 @@ def main(string_array, dimension, search_type_choice, limit):
 
     if search_type_choice == '4':
         limit = 1
+
+    while True:
+
+        if len(node_list) == 0:
+            print('-----------------------chegou no limite e nao encontrou o resultado-----------------------')
+            if search_type_choice == '3':
+                break
+            else:
+                limit += 1
+                print('-----------------------excluiu a lista e aumentou o limite(limite atualizado = {})-----------------------'.format(limit))
+
+                node = Node(shuffled_state, None, 0, "", 0)
+
+                node_list.append(node)
+                print(asizeof(node_list))
+
+        node = node_list.pop()
+
+        goal_success = agent.goal(node.state, goal_state)
+
+        count_process += 1
+
+        #print("acao {} profundidade {}".format(node.action, node.depth))
+
+        if goal_success:
+            break
+
+        if (search_type_choice == '3' or search_type_choice == '4') and node.depth == limit:
+            continue
+
+        node_list = agent.next(node, node_list, dimension)
+
+    return node, count_process
+
+
+def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, search_type):
+
+    all_nodes_created = []
+
+    node = Node(shuffled_state, None, 0, "", 0)
+
+    # defining the node priority
+    node.priority = node_priority(node.state, goal_state, search_type, node.depth)
+
+    node_list = PriorityQueue()
+    node_list.push(node, node.priority, node.created_index)
+    while True:
+
+        node = node_list.pop()
+
+        goal_success = agent.goal(node.state, goal_state)
+
+        count_process += 1
+
+        # print("acao {} profundidade {}".format(node.action, node.depth))
+
+        if goal_success:
+            break
+
+        node_list, all_nodes_created = agent.nextHeuristic(node, node_list, dimension, goal_state, all_nodes_created,
+                                                           search_type)
+
+    return node, count_process
+
+
+def main(string_array, dimension, search_type_choice, limit):
 
     start_time = time.time()
     # split the string array received from javascript to int np array
@@ -33,24 +136,6 @@ def main(string_array, dimension, search_type_choice, limit):
 
     agent = Agent()
 
-    # creating start node with default params
-    node = Node(shuffled_state, None, 0, "", 0)
-
-    # defining the node priority (only used in method 5)
-    node.priority = node_priority(node.state, goal_state)
-
-    #node.priority = state_disogarnized(node.state, goal_state)
-
-
-    if search_type_choice == '5':
-        node_list = PriorityQueue()
-        node_list.push(node, node.priority, node.created_index)
-    else:
-        node_list = list()
-        node_list.append(node)
-
-    all_nodes_created = []
-
     # count with the tentatives
     count_process = 0
 
@@ -58,46 +143,19 @@ def main(string_array, dimension, search_type_choice, limit):
     html_list = []
 
     if search_type_choice == '1':
-        search_type = 0
-    else:
-        search_type = -1
-
-    while True:
-
-        if search_type_choice != '5':
-            if len(node_list) < 1:
-                print('-----------------------chegou no limite e nao encontrou o resultado-----------------------')
-                if search_type_choice == '3':
-                    break
-                else:
-                    limit += 1
-                    print('-----------------------excluiu a lista e aumentou o limite({})-----------------------'.format(limit))
-                    node = Node(shuffled_state, None, 0, "", 0)
-                    node.priority = node_priority(node.state, goal_state)
-
-                    #node.priority = state_disogarnized(node.state, goal_state)
-                    node_list.append(node)
-
-        # pops the tested node
-        if search_type_choice == '5':
-            node = node_list.pop()
-        else:
-            node = node_list.pop(search_type)
-
-        goal_success = agent.goal(node.state, goal_state)
-
-        count_process += 1
-
-        print("acao {} profundidade {}".format(node.action, node.depth))
-
-        if goal_success:
-            break
-
-        if (search_type_choice == '3' or search_type_choice == '4') and node.depth == limit:
-            continue
-
-        node_list, all_nodes_created = agent.next(node, node_list, dimension, goal_state, all_nodes_created,
-                                                  search_type_choice)
+        node, count_process = breadth_search(agent, shuffled_state, goal_state, count_process, dimension)
+    elif search_type_choice == '2':
+        node, count_process = depth_search(agent, shuffled_state, goal_state, count_process, dimension, '2', limit)
+    elif search_type_choice == '3':
+        node, count_process = depth_search(agent, shuffled_state, goal_state, count_process, dimension, '3', limit)
+    elif search_type_choice == '4':
+        node, count_process = depth_search(agent, shuffled_state, goal_state, count_process, dimension, '4', limit)
+    elif search_type_choice == '5':
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "1")
+    elif search_type_choice == '6':
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "2")
+    elif search_type_choice == '7':
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "3")
 
     time_spent = time.time() - start_time
 
@@ -106,10 +164,9 @@ def main(string_array, dimension, search_type_choice, limit):
     try:
         while not np.array_equal(node.root.state, goal_state):
             html_list.insert(0, node.root.state.tolist())
-
             node = node.root
     except:
         print("final")
 
-    print(len(html_list))
-    return html_list, count_process, time_spent
+    total_steps = len(html_list)-1
+    return html_list, count_process, time_spent, total_steps

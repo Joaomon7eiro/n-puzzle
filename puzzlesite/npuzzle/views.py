@@ -20,11 +20,12 @@ def solve_puzzle(request):
         search_type = request.POST.get('search_type')
         limit = request.POST.get('limit')
 
-        matrix_list, nodes_processed, time_spent = main(matrix, int(dimension), search_type, limit)
+        matrix_list, nodes_processed, time_spent, total_steps = main(matrix, int(dimension), search_type, limit)
         results = {
             'matrix_list': matrix_list,
             'nodes_processed': nodes_processed,
-            'time_spent': time_spent
+            'time_spent': time_spent,
+            'total_steps': total_steps
         }
         return HttpResponse(
             json.dumps(results),

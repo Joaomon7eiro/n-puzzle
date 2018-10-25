@@ -87,10 +87,7 @@ function solve() {
             matrix = json.matrix_list
             time_spent = json.time_spent
             nodes_processed = json.nodes_processed
-
-            console.log(matrix)
-            console.log(time_spent)
-            console.log(nodes_processed)
+            total_steps = json.total_steps
 
             let container = $("#divTable")
 
@@ -125,6 +122,7 @@ function solve() {
             }
             $('.container').append(`<h3> Tempo decorrido : ${time_spent} segundos</h3>`)
             $('.container').append(`<h3> Nos testados : ${nodes_processed}</h3>`)
+            $('.container').append(`<h3> Total de Passos : ${total_steps}</h3>`)
 
             $('.container').append("<button class='btn btn-secondary' onclick='location.reload();'>Refazer</button>")
             console.log("success");
