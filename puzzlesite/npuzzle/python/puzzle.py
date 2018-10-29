@@ -90,7 +90,7 @@ def depth_search(agent, shuffled_state, goal_state, count_process, dimension, se
 
 def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, search_type):
 
-    all_nodes_created = []
+    count = 1
 
     node = Node(shuffled_state, None, 0, "", 0)
 
@@ -98,7 +98,7 @@ def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension
     node.priority = node_priority(node.state, goal_state, search_type, node.depth)
 
     node_list = PriorityQueue()
-    node_list.push(node, node.priority, node.created_index)
+    node_list.push(node, node.priority, 0)
     while True:
 
         node = node_list.pop()
@@ -112,8 +112,8 @@ def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension
         if goal_success:
             break
 
-        node_list, all_nodes_created = agent.nextHeuristic(node, node_list, dimension, goal_state, all_nodes_created,
-                                                           search_type)
+        node_list, count = agent.nextHeuristic(node, node_list, dimension, goal_state, count,
+                                               search_type)
 
     return node, count_process
 
@@ -155,7 +155,11 @@ def main(string_array, dimension, search_type_choice, limit):
     elif search_type_choice == '6':
         node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "2")
     elif search_type_choice == '7':
+        # A*
         node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "3")
+    else:
+        # Uniform cost
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "4")
 
     time_spent = time.time() - start_time
 
@@ -170,3 +174,4 @@ def main(string_array, dimension, search_type_choice, limit):
 
     total_steps = len(html_list)-1
     return html_list, count_process, time_spent, total_steps
+

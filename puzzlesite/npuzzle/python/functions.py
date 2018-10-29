@@ -31,9 +31,12 @@ def node_priority(node_state, goal_state, search_type, node_depth=None):
         return priority
     elif search_type == '2':
         return count
-    else:
+    elif search_type == '3':
         # A*
         return priority + node_depth
+    else:
+        # Uniform cost
+        return node_depth
 
 
 def search_equal_state(child_node, all_nodes):

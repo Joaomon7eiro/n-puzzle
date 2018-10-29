@@ -7,9 +7,9 @@ class PriorityQueue:
         self.nodes_queue = []
 
     def push(self, node, priority, index):
-        best_node = priority, index, node
+        new_node = priority, index, node
 
-        heapq.heappush(self.nodes_queue, best_node)
+        heapq.heappush(self.nodes_queue, new_node)
 
     def pop(self):
         priority, index, node = heapq.heappop(self.nodes_queue)
