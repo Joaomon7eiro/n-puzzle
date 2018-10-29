@@ -47,7 +47,7 @@ def node_priority(node_state, goal_state, search_type, node_depth=None):
 def search_equal_state(child_node, all_nodes):
 
     for node in all_nodes:
-        if np.array_equal(node.state, child_node.state):
+        if np.array_equal(node.state, child_node.state) and node.depth <= child_node.depth:
             return True
 
     return False

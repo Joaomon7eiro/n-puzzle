@@ -97,6 +97,8 @@ def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension
     # defining the node priority
     node.priority = node_priority(node.state, goal_state, search_type, node.depth)
 
+    all_nodes_created = [node]
+
     node_list = PriorityQueue()
     node_list.push(node, node.priority, 0)
     while True:
@@ -112,8 +114,8 @@ def heuristic_search(agent, shuffled_state, goal_state, count_process, dimension
         if goal_success:
             break
 
-        node_list, count = agent.nextHeuristic(node, node_list, dimension, goal_state, count,
-                                               search_type)
+        node_list, count, all_nodes_created = agent.nextHeuristic(node, node_list, dimension, goal_state, count,
+                                               search_type, all_nodes_created)
 
     return node, count_process
 
@@ -125,11 +127,11 @@ def main(string_array, dimension, search_type_choice, limit):
     shuffled_state_array = [int(n) for n in string_array.split(",")]
     shuffled_state = np.reshape(shuffled_state_array, (dimension, dimension))
 
-    # shuffled_state = np.array([
-    #     [4, 0, 2],
-    #     [5, 6, 8],
-    #     [1, 7, 3]
-    # ])
+    shuffled_state = np.array([
+        [4, 0, 2],
+        [5, 6, 8],
+        [1, 7, 3]
+    ])
 
     # creates the goal state based on the given dimension
     goal_state = create_n_n_matrix(dimension)
