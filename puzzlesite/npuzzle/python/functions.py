@@ -28,11 +28,16 @@ def node_priority(node_state, goal_state, search_type, node_depth=None):
                 priority += value_col - goal_col
 
     if search_type == '1':
-        return priority
-    elif search_type == '2':
+        # GME h1
         return count
+    elif search_type == '2':
+        # GME h2
+        return priority
     elif search_type == '3':
-        # A*
+        # A* h1
+        return count + node_depth
+    elif search_type == '4':
+        # A* h2
         return priority + node_depth
     else:
         # Uniform cost

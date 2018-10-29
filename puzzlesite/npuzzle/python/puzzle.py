@@ -125,11 +125,11 @@ def main(string_array, dimension, search_type_choice, limit):
     shuffled_state_array = [int(n) for n in string_array.split(",")]
     shuffled_state = np.reshape(shuffled_state_array, (dimension, dimension))
 
-    shuffled_state = np.array([
-        [4, 0, 2],
-        [5, 6, 8],
-        [1, 7, 3]
-    ])
+    # shuffled_state = np.array([
+    #     [4, 0, 2],
+    #     [5, 6, 8],
+    #     [1, 7, 3]
+    # ])
 
     # creates the goal state based on the given dimension
     goal_state = create_n_n_matrix(dimension)
@@ -151,15 +151,20 @@ def main(string_array, dimension, search_type_choice, limit):
     elif search_type_choice == '4':
         node, count_process = depth_search(agent, shuffled_state, goal_state, count_process, dimension, '4', limit)
     elif search_type_choice == '5':
+        # GME h1
         node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "1")
     elif search_type_choice == '6':
+        # GME h2
         node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "2")
     elif search_type_choice == '7':
-        # A*
+        # A* h1
         node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "3")
+    elif search_type_choice == '8':
+        # A* h2
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "4")
     else:
         # Uniform cost
-        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "4")
+        node, count_process = heuristic_search(agent, shuffled_state, goal_state, count_process, dimension, "5")
 
     time_spent = time.time() - start_time
 
