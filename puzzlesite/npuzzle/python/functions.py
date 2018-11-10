@@ -65,4 +65,42 @@ def find_number_row_and_col(state, number):
     return number_row, number_col
 
 
+def branch_factor(count_node, node_depth):
+
+    hv = 5
+    mv = 0
+
+    b = (hv + mv) / 2
+
+    error = 0.001
+
+    result = N(b, node_depth)
+
+    while (abs(count_node - result)) > error:
+        print("RODANDO WHILE")
+        if count_node < result:
+            hv = b
+        else:
+            mv = b
+
+        b = (hv + mv) / 2
+
+        result = N(b, node_depth)
+
+    print("RESULTADO=", result)
+    print("B =", b)
+
+
+def N(b, d):
+
+    result = 0
+
+    for i in range(d):
+        result += b**i
+
+    return result
+
+
+
+
 

@@ -12,7 +12,7 @@ class Agent:
         else:
             return False
 
-    def next(self, node, node_list, dimension):
+    def next(self, node, node_list, dimension, count_nodes):
 
         dimension -= 1
 
@@ -21,22 +21,26 @@ class Agent:
         if row_0 > 0:
             node_down = self.move_node(node, row_0, col_0, row_0 - 1, col_0, "down", 0)
             node_list.append(node_down)
+            count_nodes += 1
 
         if row_0 < dimension:
             node_up = self.move_node(node, row_0, col_0, row_0 + 1, col_0, "up", 0)
             node_list.append(node_up)
+            count_nodes += 1
 
         if col_0 > 0:
             node_right = self.move_node(node, row_0, col_0, row_0, col_0 - 1, "right", 0)
             node_list.append(node_right)
+            count_nodes += 1
 
         if col_0 < dimension:
             node_left = self.move_node(node, row_0, col_0, row_0, col_0 + 1, "left", 0)
             node_list.append(node_left)
+            count_nodes += 1
 
-        return node_list
+        return node_list, count_nodes
 
-    def nextHeuristic(self, node, node_list, dimension, goal_state, count, search_type, all_nodes_created=None):
+    def nextHeuristic(self, node, node_list, dimension, goal_state, count, search_type, all_nodes_created, count_nodes):
 
         dimension -= 1
 
@@ -46,11 +50,13 @@ class Agent:
             node_down = self.move_node(node, row_0, col_0, row_0 - 1, col_0, "down", count)
             count += 1
             node_down.priority = node_priority(node_down.state, goal_state, search_type, node.depth)
+            count_nodes += 1
 
             find = search_equal_state(node_down, all_nodes_created)
 
             if not find:
                 node_list.push(node_down, node_down.priority, node_down.created_index)
+                count_nodes += 1
                 all_nodes_created.append(node_down)
 
         if row_0 < dimension:
@@ -62,6 +68,7 @@ class Agent:
 
             if not find:
                 node_list.push(node_up, node_up.priority, node_up.created_index)
+                count_nodes += 1
                 all_nodes_created.append(node_up)
 
         if col_0 > 0:
@@ -73,6 +80,7 @@ class Agent:
 
             if not find:
                 node_list.push(node_right, node_right.priority, node_right.created_index)
+                count_nodes += 1
                 all_nodes_created.append(node_right)
 
         if col_0 < dimension:
@@ -84,9 +92,10 @@ class Agent:
 
             if not find:
                 node_list.push(node_left, node_left.priority, node_left.created_index)
+                count_nodes += 1
                 all_nodes_created.append(node_left)
 
-        return node_list, count, all_nodes_created
+        return node_list, count, all_nodes_created, count_nodes
 
     @staticmethod
     def move_node(node, row_0, col_0, new_value_row, new_value_col, action, index):
